@@ -1,0 +1,11 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: go-auth-mongodb
+    restart: no
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: authn-with-jwt
