@@ -1,0 +1,35 @@
+#@baseUrl = http://localhost:8080
+
+### Register a new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser2",
+  "email": "test@example.com",
+  "password": "securepassword123"
+}
+
+### Login with user credentials
+# This will return an auth cookie; the response handler saves it to `authCookie`
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "securepassword123"
+}
+
+> {%
+  const setCookie = response.headers['set-cookie'] || response.headers['Set-Cookie'];
+  if (setCookie && setCookie.length) {
+    const cookie = setCookie[0].split(';')[0]; // pega "nome=valor"
+    client.global.set('authCookie', cookie);
+    console.log('authCookie saved:', cookie);
+  }
+%}
+
+
+### Get user information (Protected route)
+GET {{baseUrl}}/api/user
+Cookie: {{authCookie}}

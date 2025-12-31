@@ -2,6 +2,7 @@ package server
 
 import (
 	"auth-jwt/backend/internal/database"
+	"auth-jwt/backend/internal/middleware"
 	"auth-jwt/backend/internal/repositories"
 	"fmt"
 	"net/http"
@@ -61,6 +62,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}
 
 	protected := r.Group("/api")
+	protected.Use(middleware.AuthMiddleware(s.usersRepository))
 	{
 		protected.GET("/user", userHandler.GetUser)
 	}
